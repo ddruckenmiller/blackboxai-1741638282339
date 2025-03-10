@@ -4,28 +4,95 @@
 #map {
     min-height: 500px;
     z-index: 1;
+    transition: all 0.3s ease;
+    box-shadow: inset 0 0 10px rgba(0,0,0,0.1);
 }
 
-/* Button states */
+#map:hover {
+    box-shadow: inset 0 0 15px rgba(0,0,0,0.15);
+}
+
+/* Button states and animations */
+button {
+    position: relative;
+    overflow: hidden;
+    transform: translateY(0);
+    transition: all 0.2s ease;
+}
+
+button:hover:not(:disabled) {
+    transform: translateY(-2px);
+}
+
+button:active:not(:disabled) {
+    transform: translateY(0);
+}
+
 button:disabled {
-    opacity: 0.5;
+    opacity: 0.6;
     cursor: not-allowed;
 }
 
-/* Smooth transitions */
-.transition-all {
+/* Button ripple effect */
+button::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 5px;
+    height: 5px;
+    background: rgba(255, 255, 255, 0.5);
+    opacity: 0;
+    border-radius: 100%;
+    transform: scale(1, 1) translate(-50%);
+    transform-origin: 50% 50%;
+}
+
+button:focus:not(:active)::after {
+    animation: ripple 1s ease-out;
+}
+
+@keyframes ripple {
+    0% {
+        transform: scale(0, 0);
+        opacity: 0.5;
+    }
+    100% {
+        transform: scale(100, 100);
+        opacity: 0;
+    }
+}
+
+/* Input and select field styles */
+input, select {
     transition: all 0.3s ease;
 }
 
-/* Modal animation */
+input:hover, select:hover {
+    border-color: #93C5FD;
+}
+
+input:focus, select:focus {
+    outline: none;
+    border-color: #3B82F6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* Modal animations */
 @keyframes fadeIn {
     from { opacity: 0; }
     to { opacity: 1; }
 }
 
 @keyframes slideIn {
-    from { transform: translateY(-20px); opacity: 0; }
-    to { transform: translateY(0); opacity: 1; }
+    from { 
+        transform: translateY(-20px);
+        opacity: 0;
+    }
+    to { 
+        transform: translateY(0);
+        opacity: 1;
+    }
 }
 
 #shareModal {
@@ -36,30 +103,52 @@ button:disabled {
     animation: slideIn 0.3s ease;
 }
 
-/* Custom scrollbar for statistics */
-.statistics-container::-webkit-scrollbar {
-    width: 8px;
+/* Toast animations */
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
 }
 
-.statistics-container::-webkit-scrollbar-track {
-    background: #f1f1f1;
-    border-radius: 4px;
+@keyframes slideOutRight {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateX(100%);
+        opacity: 0;
+    }
 }
 
-.statistics-container::-webkit-scrollbar-thumb {
-    background: #888;
-    border-radius: 4px;
+.toast {
+    animation: slideInRight 0.3s ease forwards;
 }
 
-.statistics-container::-webkit-scrollbar-thumb:hover {
-    background: #555;
+.toast.hiding {
+    animation: slideOutRight 0.3s ease forwards;
+}
+
+/* Statistics card hover effects */
+.bg-gray-50 {
+    transition: all 0.3s ease;
+}
+
+.bg-gray-50:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 
 /* Loading spinner */
 .loading-spinner {
     border: 3px solid rgba(0, 0, 0, 0.1);
     border-radius: 50%;
-    border-top: 3px solid #3498db;
+    border-top: 3px solid #3B82F6;
     width: 20px;
     height: 20px;
     animation: spin 1s linear infinite;
@@ -68,25 +157,6 @@ button:disabled {
 @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
-}
-
-/* Toast notification */
-.toast {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    padding: 1rem;
-    background: #333;
-    color: white;
-    border-radius: 8px;
-    display: none;
-    animation: slideUp 0.3s ease;
-    z-index: 1000;
-}
-
-@keyframes slideUp {
-    from { transform: translateY(100%); opacity: 0; }
-    to { transform: translateY(0); opacity: 1; }
 }
 
 /* Responsive adjustments */
@@ -99,4 +169,69 @@ button:disabled {
         max-height: 200px;
         overflow-y: auto;
     }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #93C5FD;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #3B82F6;
+}
+
+/* GPS status indicator pulse animation */
+@keyframes pulse {
+    0% {
+        opacity: 0.6;
+    }
+    50% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0.6;
+    }
+}
+
+#gpsStatus {
+    display: inline-flex;
+    align-items: center;
+}
+
+#gpsStatus::before {
+    content: '';
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-right: 6px;
+    animation: pulse 2s infinite;
+}
+
+#gpsStatus.text-green-600::before {
+    background-color: #059669;
+}
+
+#gpsStatus.text-red-600::before {
+    background-color: #DC2626;
+}
+
+#gpsStatus.text-yellow-600::before {
+    background-color: #D97706;
+}
+
+#gpsStatus.text-blue-600::before {
+    background-color: #2563EB;
 }
