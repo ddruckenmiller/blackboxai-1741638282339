@@ -18,6 +18,13 @@ button {
     overflow: hidden;
     transform: translateY(0);
     transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+/* Additional Features buttons */
+#dressageTest, #games, #competition {
+    min-height: 48px;
+    margin: 8px 0;
 }
 
 button:hover:not(:disabled) {
@@ -78,7 +85,42 @@ input:focus, select:focus {
     box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
 
-/* Modal animations */
+/* Modal styles and animations */
+.hidden {
+    display: none !important;
+}
+
+#shareModal,
+#dressageModal,
+#gamesModal,
+#competitionModal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 50;
+    animation: fadeIn 0.3s ease;
+}
+
+#shareModal > div,
+#dressageModal > div,
+#gamesModal > div,
+#competitionModal > div {
+    background-color: white;
+    padding: 1.5rem;
+    border-radius: 0.75rem;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    width: 100%;
+    max-width: 42rem;
+    margin: 1rem;
+    animation: slideIn 0.3s ease;
+}
+
 @keyframes fadeIn {
     from { opacity: 0; }
     to { opacity: 1; }
@@ -93,14 +135,6 @@ input:focus, select:focus {
         transform: translateY(0);
         opacity: 1;
     }
-}
-
-#shareModal {
-    animation: fadeIn 0.3s ease;
-}
-
-#shareModal > div {
-    animation: slideIn 0.3s ease;
 }
 
 /* Toast animations */
