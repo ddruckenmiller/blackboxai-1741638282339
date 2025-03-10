@@ -200,7 +200,11 @@ function initializeControls() {
     pauseButton.addEventListener('click', togglePause);
     resetButton.addEventListener('click', resetRide);
     shareButton.addEventListener('click', showShareModal);
-    dressageButton.addEventListener('click', () => document.getElementById('dressageModal').classList.remove('hidden'));
+    dressageButton.addEventListener('click', () => {
+        const modal = document.getElementById('dressageModal');
+        modal.classList.remove('hidden');
+        showToast('Dressage Test modal opened', 'info');
+    });
     gamesButton.addEventListener('click', () => document.getElementById('gamesModal').classList.remove('hidden'));
     competitionButton.addEventListener('click', () => document.getElementById('competitionModal').classList.remove('hidden'));
 }
