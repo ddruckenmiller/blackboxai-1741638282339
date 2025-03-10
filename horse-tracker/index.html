@@ -15,13 +15,20 @@
     <!-- Custom CSS -->
     <link rel="stylesheet" href="css/style.css">
 </head>
-<body class="bg-gray-100 font-['Inter']">
+<body class="bg-gray-50 font-['Inter'] min-h-screen">
     <!-- Header -->
-    <header class="bg-white shadow-md">
+    <header class="bg-white shadow-sm border-b border-gray-200">
         <div class="container mx-auto px-4 py-4">
-            <h1 class="text-3xl font-bold text-gray-800">
-                <i class="fas fa-horse-head mr-2"></i>Horse Riding Tracker
-            </h1>
+            <div class="flex items-center justify-between">
+                <h1 class="text-3xl font-bold text-gray-800 flex items-center">
+                    <i class="fas fa-horse-head mr-3 text-blue-600"></i>
+                    Horse Riding Tracker
+                </h1>
+                <div class="text-sm text-gray-600">
+                    <i class="fas fa-signal mr-1"></i>
+                    <span id="gpsStatus">GPS Status: Waiting...</span>
+                </div>
+            </div>
         </div>
     </header>
 
@@ -29,48 +36,134 @@
     <main class="container mx-auto px-4 py-8">
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <!-- Map Section -->
-            <div class="lg:col-span-2">
-                <div id="map" class="w-full h-[500px] rounded-lg shadow-lg"></div>
+            <div class="lg:col-span-2 space-y-4">
+                <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200">
+                    <div id="map" class="w-full h-[500px] rounded-lg overflow-hidden"></div>
+                </div>
+                
+            <!-- Quick Stats Bar -->
+            <div class="grid grid-cols-5 gap-4">
+                <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200">
+                    <div class="text-sm text-gray-600 mb-1">Current Speed</div>
+                    <div id="currentSpeed" class="text-2xl font-bold text-gray-800">0.0 km/h</div>
+                </div>
+                <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200">
+                    <div class="text-sm text-gray-600 mb-1">Current Gait</div>
+                    <div id="gait" class="text-2xl font-bold text-gray-800">N/A</div>
+                </div>
+                <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200">
+                    <div class="text-sm text-gray-600 mb-1">Turn Angle</div>
+                    <div id="turn" class="text-2xl font-bold text-gray-800">0°</div>
+                </div>
+                <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200">
+                    <div class="text-sm text-gray-600 mb-1">Elevation</div>
+                    <div id="elevation" class="text-2xl font-bold text-gray-800">0 m</div>
+                </div>
+                <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200">
+                    <div class="text-sm text-gray-600 mb-1">Weather</div>
+                    <div id="weather" class="text-2xl font-bold text-gray-800">--°C</div>
+                </div>
             </div>
 
             <!-- Controls & Stats Section -->
-            <div class="bg-white p-6 rounded-lg shadow-lg">
-                <!-- Ride Controls -->
-                <div class="space-y-4">
-                    <button id="startRide" class="w-full py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
-                        <i class="fas fa-play mr-2"></i>Start Ride
-                    </button>
-                    <button id="stopRide" class="w-full py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors" disabled>
-                        <i class="fas fa-stop mr-2"></i>Stop Ride
-                    </button>
-                    <button id="resetRide" class="w-full py-3 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors" disabled>
-                        <i class="fas fa-redo mr-2"></i>Reset Ride
-                    </button>
-                </div>
-
-                <!-- Ride Statistics -->
-                <div class="mt-8">
-                    <h2 class="text-xl font-semibold mb-4">Ride Statistics</h2>
+            <div class="space-y-4">
+                <!-- Ride Details -->
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                    <h2 class="text-xl font-semibold mb-4 flex items-center">
+                        <i class="fas fa-info-circle mr-2 text-blue-600"></i>
+                        Ride Details
+                    </h2>
                     <div class="space-y-4">
-                        <div class="bg-gray-50 p-4 rounded-lg">
-                            <p class="text-gray-600">Duration</p>
-                            <p id="duration" class="text-2xl font-bold">00:00:00</p>
+                        <div class="relative">
+                            <input type="text" id="rideName" placeholder="Enter ride name" 
+                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
                         </div>
-                        <div class="bg-gray-50 p-4 rounded-lg">
-                            <p class="text-gray-600">Distance</p>
-                            <p id="distance" class="text-2xl font-bold">0.00 km</p>
-                        </div>
-                        <div class="bg-gray-50 p-4 rounded-lg">
-                            <p class="text-gray-600">Average Speed</p>
-                            <p id="speed" class="text-2xl font-bold">0.0 km/h</p>
+                        <div class="relative">
+                            <select id="horseSelect" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                <option value="">Select horse</option>
+                                <option value="horse1">Thunder</option>
+                                <option value="horse2">Storm</option>
+                                <option value="horse3">Lightning</option>
+                            </select>
                         </div>
                     </div>
                 </div>
 
+                <!-- Ride Controls -->
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                    <h2 class="text-xl font-semibold mb-4 flex items-center">
+                        <i class="fas fa-sliders-h mr-2 text-blue-600"></i>
+                        Ride Controls
+                    </h2>
+                    <div class="space-y-3">
+                        <button id="startRide" class="w-full py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors flex items-center justify-center">
+                            <i class="fas fa-play mr-2"></i>
+                            Start Ride
+                        </button>
+                        <button id="stopRide" class="w-full py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors flex items-center justify-center" disabled>
+                            <i class="fas fa-stop mr-2"></i>
+                            Stop Ride
+                        </button>
+                        <button id="pauseRide" class="w-full py-3 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 transition-colors flex items-center justify-center" disabled>
+                            <i class="fas fa-pause mr-2"></i>
+                            Pause Ride
+                        </button>
+                        <button id="resetRide" class="w-full py-3 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors flex items-center justify-center" disabled>
+                            <i class="fas fa-redo mr-2"></i>
+                            Reset Ride
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Ride Statistics -->
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                    <h2 class="text-xl font-semibold mb-4 flex items-center">
+                        <i class="fas fa-chart-line mr-2 text-blue-600"></i>
+                        Ride Statistics
+                    </h2>
+                    <div class="space-y-4">
+                        <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                            <p class="text-gray-600 text-sm mb-1">Duration</p>
+                            <p id="duration" class="text-2xl font-bold text-gray-800">00:00:00</p>
+                        </div>
+                        <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                            <p class="text-gray-600 text-sm mb-1">Distance</p>
+                            <p id="distance" class="text-2xl font-bold text-gray-800">0.00 km</p>
+                        </div>
+                        <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                            <p class="text-gray-600 text-sm mb-1">Average Speed</p>
+                            <p id="speed" class="text-2xl font-bold text-gray-800">0.0 km/h</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Additional Features Section -->
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                    <h2 class="text-xl font-semibold mb-4 flex items-center">
+                        <i class="fas fa-star mr-2 text-blue-600"></i>
+                        Additional Features
+                    </h2>
+                    <div class="space-y-3">
+                        <button id="dressageTest" class="w-full py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors flex items-center justify-center">
+                            <i class="fas fa-trophy mr-2"></i>
+                            Dressage Test
+                        </button>
+                        <button id="games" class="w-full py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors flex items-center justify-center">
+                            <i class="fas fa-gamepad mr-2"></i>
+                            Games
+                        </button>
+                        <button id="competition" class="w-full py-3 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors flex items-center justify-center">
+                            <i class="fas fa-medal mr-2"></i>
+                            Competition
+                        </button>
+                    </div>
+                </div>
+
                 <!-- Share Section -->
-                <div class="mt-8">
-                    <button id="shareRide" class="w-full py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors" disabled>
-                        <i class="fas fa-share-alt mr-2"></i>Share Ride
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                    <button id="shareRide" class="w-full py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center" disabled>
+                        <i class="fas fa-share-alt mr-2"></i>
+                        Share Ride
                     </button>
                 </div>
             </div>
@@ -78,23 +171,158 @@
     </main>
 
     <!-- Share Modal -->
-    <div id="shareModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-        <div class="bg-white rounded-lg p-6 max-w-md w-full mx-4">
-            <h2 class="text-2xl font-bold mb-4">Share Your Ride</h2>
+    <div id="shareModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="bg-white rounded-xl p-6 max-w-md w-full mx-4 shadow-xl">
+            <h2 class="text-2xl font-bold mb-4 flex items-center">
+                <i class="fas fa-share-alt mr-2 text-blue-600"></i>
+                Share Your Ride
+            </h2>
             <div class="mb-4">
                 <p class="text-gray-600 mb-2">Ride Summary</p>
-                <div id="rideSummary" class="bg-gray-50 p-4 rounded-lg"></div>
+                <div id="rideSummary" class="bg-gray-50 p-4 rounded-lg border border-gray-200 whitespace-pre-wrap"></div>
             </div>
             <div class="flex justify-end space-x-4">
-                <button id="copyLink" class="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700">
+                <button id="copyLink" class="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors">
+                    <i class="fas fa-copy mr-2"></i>
                     Copy Summary
                 </button>
-                <button id="closeModal" class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700">
+                <button id="closeModal" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors">
+                    <i class="fas fa-times mr-2"></i>
                     Close
                 </button>
             </div>
         </div>
     </div>
+
+    <!-- Dressage Test Modal -->
+    <div id="dressageModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="bg-white rounded-xl p-6 max-w-2xl w-full mx-4 shadow-xl">
+            <h2 class="text-2xl font-bold mb-4 flex items-center">
+                <i class="fas fa-trophy mr-2 text-purple-600"></i>
+                Dressage Test
+            </h2>
+            <div class="mb-6">
+                <select id="dressageLevel" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent mb-4">
+                    <option value="">Select Test Level</option>
+                    <option value="intro">Introductory Level</option>
+                    <option value="training">Training Level</option>
+                    <option value="first">First Level</option>
+                </select>
+                <div id="dressageInstructions" class="bg-gray-50 p-4 rounded-lg border border-gray-200 mb-4">
+                    Select a test level to begin...
+                </div>
+                <div class="grid grid-cols-2 gap-4 mb-4">
+                    <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                        <p class="text-gray-600 text-sm mb-1">Time</p>
+                        <p id="dressageTime" class="text-2xl font-bold text-gray-800">00:00</p>
+                    </div>
+                    <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                        <p class="text-gray-600 text-sm mb-1">Score</p>
+                        <p id="dressageScore" class="text-2xl font-bold text-gray-800">0.0</p>
+                    </div>
+                </div>
+            </div>
+            <div class="flex justify-end space-x-4">
+                <button id="startDressage" class="px-6 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors">
+                    <i class="fas fa-play mr-2"></i>
+                    Start Test
+                </button>
+                <button id="closeDressageModal" class="px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors">
+                    <i class="fas fa-times mr-2"></i>
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Games Modal -->
+    <div id="gamesModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="bg-white rounded-xl p-6 max-w-2xl w-full mx-4 shadow-xl">
+            <h2 class="text-2xl font-bold mb-4 flex items-center">
+                <i class="fas fa-gamepad mr-2 text-green-600"></i>
+                Training Games
+            </h2>
+            <div class="mb-6">
+                <select id="gameSelect" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent mb-4">
+                    <option value="">Select Game</option>
+                    <option value="obstacles">Obstacle Course</option>
+                    <option value="patterns">Pattern Challenge</option>
+                    <option value="precision">Precision Riding</option>
+                </select>
+                <div id="gameInstructions" class="bg-gray-50 p-4 rounded-lg border border-gray-200 mb-4">
+                    Select a game to begin...
+                </div>
+                <div class="grid grid-cols-2 gap-4 mb-4">
+                    <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                        <p class="text-gray-600 text-sm mb-1">Time</p>
+                        <p id="gameTime" class="text-2xl font-bold text-gray-800">00:00</p>
+                    </div>
+                    <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                        <p class="text-gray-600 text-sm mb-1">Score</p>
+                        <p id="gameScore" class="text-2xl font-bold text-gray-800">0</p>
+                    </div>
+                </div>
+            </div>
+            <div class="flex justify-end space-x-4">
+                <button id="startGame" class="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
+                    <i class="fas fa-play mr-2"></i>
+                    Start Game
+                </button>
+                <button id="closeGamesModal" class="px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors">
+                    <i class="fas fa-times mr-2"></i>
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Competition Modal -->
+    <div id="competitionModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="bg-white rounded-xl p-6 max-w-2xl w-full mx-4 shadow-xl">
+            <h2 class="text-2xl font-bold mb-4 flex items-center">
+                <i class="fas fa-medal mr-2 text-orange-600"></i>
+                Competition Mode
+            </h2>
+            <div class="mb-6">
+                <select id="competitionType" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent mb-4">
+                    <option value="">Select Competition Type</option>
+                    <option value="speed">Speed Trial</option>
+                    <option value="precision">Precision Challenge</option>
+                    <option value="endurance">Endurance Test</option>
+                </select>
+                <div id="competitionInstructions" class="bg-gray-50 p-4 rounded-lg border border-gray-200 mb-4">
+                    Select a competition type to begin...
+                </div>
+                <div class="grid grid-cols-3 gap-4 mb-4">
+                    <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                        <p class="text-gray-600 text-sm mb-1">Time</p>
+                        <p id="competitionTime" class="text-2xl font-bold text-gray-800">00:00</p>
+                    </div>
+                    <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                        <p class="text-gray-600 text-sm mb-1">Score</p>
+                        <p id="competitionScore" class="text-2xl font-bold text-gray-800">0.0</p>
+                    </div>
+                    <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                        <p class="text-gray-600 text-sm mb-1">Rank</p>
+                        <p id="competitionRank" class="text-2xl font-bold text-gray-800">--</p>
+                    </div>
+                </div>
+            </div>
+            <div class="flex justify-end space-x-4">
+                <button id="startCompetition" class="px-6 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors">
+                    <i class="fas fa-play mr-2"></i>
+                    Start Competition
+                </button>
+                <button id="closeCompetitionModal" class="px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors">
+                    <i class="fas fa-times mr-2"></i>
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification Container -->
+    <div id="toastContainer" class="fixed bottom-4 right-4 z-50"></div>
 
     <!-- Leaflet JS -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
