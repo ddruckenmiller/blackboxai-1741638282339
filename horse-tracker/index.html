@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Horse Riding Tracker</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="bg-gray-100 font-['Inter']">
+    <!-- Header -->
+    <header class="bg-white shadow-md">
+        <div class="container mx-auto px-4 py-4">
+            <h1 class="text-3xl font-bold text-gray-800">
+                <i class="fas fa-horse-head mr-2"></i>Horse Riding Tracker
+            </h1>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Map Section -->
+            <div class="lg:col-span-2">
+                <div id="map" class="w-full h-[500px] rounded-lg shadow-lg"></div>
+            </div>
+
+            <!-- Controls & Stats Section -->
+            <div class="bg-white p-6 rounded-lg shadow-lg">
+                <!-- Ride Controls -->
+                <div class="space-y-4">
+                    <button id="startRide" class="w-full py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
+                        <i class="fas fa-play mr-2"></i>Start Ride
+                    </button>
+                    <button id="stopRide" class="w-full py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors" disabled>
+                        <i class="fas fa-stop mr-2"></i>Stop Ride
+                    </button>
+                    <button id="resetRide" class="w-full py-3 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors" disabled>
+                        <i class="fas fa-redo mr-2"></i>Reset Ride
+                    </button>
+                </div>
+
+                <!-- Ride Statistics -->
+                <div class="mt-8">
+                    <h2 class="text-xl font-semibold mb-4">Ride Statistics</h2>
+                    <div class="space-y-4">
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <p class="text-gray-600">Duration</p>
+                            <p id="duration" class="text-2xl font-bold">00:00:00</p>
+                        </div>
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <p class="text-gray-600">Distance</p>
+                            <p id="distance" class="text-2xl font-bold">0.00 km</p>
+                        </div>
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <p class="text-gray-600">Average Speed</p>
+                            <p id="speed" class="text-2xl font-bold">0.0 km/h</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Share Section -->
+                <div class="mt-8">
+                    <button id="shareRide" class="w-full py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors" disabled>
+                        <i class="fas fa-share-alt mr-2"></i>Share Ride
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Share Modal -->
+    <div id="shareModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+        <div class="bg-white rounded-lg p-6 max-w-md w-full mx-4">
+            <h2 class="text-2xl font-bold mb-4">Share Your Ride</h2>
+            <div class="mb-4">
+                <p class="text-gray-600 mb-2">Ride Summary</p>
+                <div id="rideSummary" class="bg-gray-50 p-4 rounded-lg"></div>
+            </div>
+            <div class="flex justify-end space-x-4">
+                <button id="copyLink" class="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700">
+                    Copy Summary
+                </button>
+                <button id="closeModal" class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <!-- Application JS -->
+    <script src="js/app.js"></script>
+</body>
+</html>
